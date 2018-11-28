@@ -4,7 +4,61 @@
     </head>    
     <body>
         <div><h2>Author</h2></div>
-        <% include menu.ejs%> 
-        <a href="author">Display Author</a>  
+        <% include menu.ejs%>         
+        <div>
+            <input type="text" id="authorId">
+            <button onclick="getAuthor()">Search</button>
+            <button onclick="allAuthor()">display all authors</button>
+        </div>
+        <br><br>
+        <div>
+            <span id="authorSpan"></span>
+        </div>
+        <br>        
+        <script type="text/javascript">
+
+            function getAuthor() {
+                // get author
+                var authorId = document.getElementById('authorId').value;
+                console.log(authorId);
+                var xhr = new XMLHttpRequest();
+                console.log("Starting search for: " + authorId);
+                xhr.open('GET', 'author/' + authorId);
+                xhr.onload = function() {
+                    console.log("got response!");
+                    if (xhr.status === 200) {
+                        var resp = JSON.parse(xhr.responseText);
+                        var authorSpan = document.getElementById('authorSpan');
+                        authorSpan.textContent = "Author: " + resp.author_id + " "  + resp.name + " " + resp.description;
+                    } else {
+                        alert('Request failed.  Returned status of ' + xhr.status);
+                    }
+                };
+                xhr.send();             
+            }
+
+            function allAuthor() {
+                // get all author
+                var xhr = new XMLHttpRequest();                
+                xhr.open('GET', 'author/');
+                xhr.onload = function() {
+                    console.log("got response!");
+                    if (xhr.status === 200) {
+                        var comma = "";
+                        var aText = "";
+                        var resp = JSON.parse(xhr.responseText);
+                        var authorSpan = document.getElementById('authorSpan');
+                        for ( var i = 0; i < resp.length; i++ ) {
+                            aText = aText + comma + + resp[i].author_id + " " + resp[i].name;
+                            comma = ", ";
+                        }
+                        authorSpan.textContent = aText;
+                    } else {
+                        alert('Request failed.  Returned status of ' + xhr.status);
+                    }
+                };
+                xhr.send();             
+            }
+        </script>
     </body>    
 </html>

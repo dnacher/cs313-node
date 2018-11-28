@@ -1,13 +1,16 @@
-const routes = require('express').Router();
-const authorSrvc = require('./services/author.service');
+const express = require('express');
+const authorRouter = express.Router();
+const authorSrvc = require('../services/author.service');
 
-routes.get('/author', (req, res) => {
-  res.status(200).json({ author: 'Display' });
+//var app = express();
+module.exports = authorRouter;
+
+authorRouter.get('/author', (req, res) => {
+  res.status(200).json({ author: 'tito' });
 });
 
-module.exports = routes;
-
-app.get('/author/:id', (req, res) => {
+authorRouter.get('author/:id', (req, res) => {
+  console.log("author By Id");
   var id = req.params.id;
   authorSrvc.getAuthorById(id)
       .then(resp => {
@@ -16,5 +19,5 @@ app.get('/author/:id', (req, res) => {
       })
       .catch(e => {
           console.log("Error:" + e);
-      });   
+      });
 });
