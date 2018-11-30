@@ -44,7 +44,7 @@ app.get('/author', authorController.getAuthors);
 
 app.post('/author/:name/:descr', authorController.saveAuthor);
 
-app.put('/author/:descr', authorController.updateAuthor);
+app.put('/author/:name/:descr', authorController.updateAuthor);
 
 app.delete('/author/:author_id', authorController.deleteAuthor);
 
