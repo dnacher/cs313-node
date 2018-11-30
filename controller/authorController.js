@@ -1,17 +1,17 @@
 const authorSrvc = require('../services/author.service');
 
-function getAuthorById(req, res) {
+function getItemTypeById(req, res) {
     var value= req.params.value;
-    console.log("Authors by id");
+    console.log("item type by id");
     console.log(value);
-    authorSrvc.getAuthorById(value).then(resp => { 
+    itemTypeSrvc.getItemTypeById(value).then(resp => { 
         console.log("Response: " + JSON.stringify(resp.rows[0]));
         res.end(JSON.stringify(resp.rows[0]));
     })
     .catch(e => {
         console.log("Error: " + e);
-    });   
-}
+    });
+};
 
 function getAuthors(req, res) {
     console.log("all Authors");
@@ -63,7 +63,6 @@ function deleteAuthor(req, res) {
 }
 
 module.exports = {
-    getAuthorById: getAuthorById,
     getAuthors: getAuthors,
     saveAuthor: saveAuthor,
     deleteAuthor: deleteAuthor,

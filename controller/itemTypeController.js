@@ -62,9 +62,9 @@ function deleteItemType(req, res) {
 }
 
 module.exports = {
-    getItemById: getItemById,
-    getItems: getItems,
-    saveItem: saveItem,
-    deleteItem: deleteItem,
-    updateItem: updateItem
+    getItemTypeById: getItemTypeById,
+    getItemTypes: getItemTypes,
+    saveItemType: saveItemType,
+    updateItemType: updateItemType,
+    deleteItemType: deleteItemType
 }
