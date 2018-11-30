@@ -1,4 +1,4 @@
-const itemTypeSrvc = require('../services/item.service');
+const itemSrvc = require('../services/item.service');
 
 function getItemById(req, res) {
     var value= req.params.value;
@@ -42,8 +42,9 @@ function saveItem(req, res) {
 
 function updateItem(req, res) {
     var descr = req.params.descr;
-    console.log("updating item: " + name + " " + descr);
-    itemSrvc.updateItem(name,descr).then(resp => { 
+    var item_id = req.params.item_id;
+    console.log("updating item: " + item_id + " " + descr);
+    itemSrvc.updateItem(item_id,descr).then(resp => { 
         console.log("Done!");
         res.end("done");
     })
@@ -55,7 +56,7 @@ function updateItem(req, res) {
 function deleteItem(req, res) {
     var item_id = req.params.item_id;
     console.log("Deleting item: " + item_id);
-    itemSrvcrSrvc.deleteItem(item_id).then(resp => { 
+    itemSrvc.deleteItem(item_id).then(resp => { 
         console.log("Done!");
         res.end("done");
     })

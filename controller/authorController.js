@@ -40,7 +40,7 @@ function saveAuthor(req, res){
 function updateAuthor(req, res) {
     var descr = req.params.descr;
     var author_id = req.params.author_id;
-    console.log("Inserting author: " + author_id + " " + descr);
+    console.log("updating author: " + author_id + " " + descr);
     authorSrvc.updateAuthor(author_id,descr).then(resp => { 
         console.log("Done!");
         res.end("done");

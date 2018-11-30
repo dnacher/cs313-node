@@ -28,7 +28,7 @@ UserTypeService.prototype.updateUserType = function(user_type_id, descr) {
 };
 
 UserTypeService.prototype.deleteUserType = function(user_type_id) {
-    return pool.query('DELETE FROM user_type WHERE user_typer_id= $1', [user_type_id]);
+    return pool.query('DELETE FROM user_type WHERE user_type_id= $1', [user_type_id]);
 };
 
 var userTypeService = new UserTypeService();

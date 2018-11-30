@@ -44,18 +44,18 @@ app.get('/author', authorController.getAuthors);
 
 app.post('/author/:name/:descr', authorController.saveAuthor);
 
-app.put('/author/:name/:descr', authorController.updateAuthor);
+app.put('/author/:author_id/:descr', authorController.updateAuthor);
 
 app.delete('/author/:author_id', authorController.deleteAuthor);
 
 //*********************************************************Item Type Functions*********************************************************
-// app.get('/item_type/:value',itemTypeController.getItemById);
+app.get('/item_type/:value',itemTypeController.getItemTypeById);
 
-app.get('/itemType', itemTypeController.getItemTypes);
+app.get('/item_type', itemTypeController.getItemTypes);
 
 app.post('/item_type/:name/:descr', itemTypeController.saveItemType);
 
-app.put('/item_type/:descr', itemTypeController.updateItemType);
+app.put('/item_type/:item_type_id/:descr', itemTypeController.updateItemType);
 
 app.delete('/item_type/:item_type_id', itemTypeController.deleteItemType);
 
@@ -66,7 +66,7 @@ app.get('/item', itemController.getItems);
 
 app.post('/item/:item_type_id/:item_author_id/:name/:descr',itemController.saveItem);
 
-app.put('/item/:descr', itemController.updateItem);
+app.put('/item/:item_id/:descr', itemController.updateItem);
 
 app.delete('/item/:item_id', itemController.deleteItem);
 
@@ -77,7 +77,7 @@ app.get('/user_type', userTypeController.getUserTypes);
 
 app.post('/user_type/:name/:descr', userTypeController.saveUserType);
 
-app.put('/user_type/:descr', userTypeController.updateUserType);
+app.put('/user_type/:user_type_id/:descr', userTypeController.updateUserType);
 
 app.delete('/user_type/:user_type_id', userTypeController.deleteUserType);
 
@@ -88,7 +88,7 @@ app.get('/user', userController.getUsers);
 
 app.post('/user/:user_type_id/:name/:descr/:password', userController.saveUser);
 
-app.put('/user/:descr', userController.updateUser);
+app.put('/user/:user_id/:descr', userController.updateUser);
 
 app.delete('/user/:user_id', userController.deleteUser);
 

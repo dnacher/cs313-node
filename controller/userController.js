@@ -30,7 +30,7 @@ function saveUser(req, res) {
     var descr = req.params.descr;
     var pass = req.params.password;
     console.log("Inserting User: name: " + name + " descr: " + descr + " user_type_id: " + user_type_id);
-    userSrvc.saveUser(name,descr).then(resp => { 
+    userSrvc.saveUser(user_type_id,name,descr,pass).then(resp => { 
         console.log("Done!");
         res.end("done");
     })
@@ -41,8 +41,9 @@ function saveUser(req, res) {
 
 function updateUser(req, res) {
     var descr = req.params.descr;
-    console.log("updating user: " + name + " " + descr);
-    userSrvc.updateUser(name,descr).then(resp => { 
+    var user_id = req.params.user_id;
+    console.log("updating user: " + user_id + " " + descr);
+    userSrvc.updateUser(user_id,descr).then(resp => { 
         console.log("Done!");
         res.end("done");
     })

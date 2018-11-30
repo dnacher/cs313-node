@@ -2,7 +2,7 @@ const itemTypeSrvc = require('../services/itemType.service');
 
 function getItemTypeById(req, res) {
     var value= req.params.value;
-    console.log("item type by id");
+    console.log("ItemType by id");
     console.log(value);
     itemTypeSrvc.getItemTypeById(value).then(resp => { 
         console.log("Response: " + JSON.stringify(resp.rows[0]));
@@ -39,8 +39,9 @@ function saveItemType(req, res) {
 
 function updateItemType(req, res){
     var descr = req.params.descr;
-    console.log("updating item Type: " + name + " " + descr);
-    itemTypeSrvc.updateItemType(name,descr).then(resp => { 
+    var item_type_id = req.params.item_type_id;
+    console.log("updating item Type: " + item_type_id + " " + descr);
+    itemTypeSrvc.updateItemType(item_type_id,descr).then(resp => { 
         console.log("Done!");
         res.end("done");
     })

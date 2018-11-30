@@ -12,11 +12,11 @@ const pool = new Pool({
 function ItemTypeService() {};
 
 ItemTypeService.prototype.getItemTypeById = function( item_type_id ) {
-    return pool.query('select item_type_id,name, description from item_type where item_type_id = $1', [item_type_id]);
+    return pool.query('SELECT item_type_id,name, description FROM item_type WHERE item_type_id = $1', [item_type_id]);
 };
 
 ItemTypeService.prototype.getItemTypes = function() {
-    return pool.query('select item_type_id,name, description from item_type');
+    return pool.query('SELECT item_type_id,name, description FROM item_type');
 };
 
 ItemTypeService.prototype.saveItemType = function(name, descr) {

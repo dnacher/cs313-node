@@ -39,8 +39,9 @@ function saveUserType(req, res) {
 
 function updateUserType(req, res) {
     var descr = req.params.descr;
-    console.log("updating user Type: " + name + " " + descr);
-    userTypeSrvc.updateUserType(name,descr).then(resp => { 
+    var user_type_id = req.params.user_type_id;
+    console.log("updating user Type: " + user_type_id + " " + descr);
+    userTypeSrvc.updateUserType(user_type_id,descr).then(resp => { 
         console.log("Done!");
         res.end("done");
     })

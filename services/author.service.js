@@ -24,7 +24,7 @@ AuthorService.prototype.saveAuthor = function(name, descr) {
 };
 
 AuthorService.prototype.updateAuthor = function(author_id, descr) {
-    return pool.query('UPDATE author set description=$1 WHERE author_id=$2', [descr, author_id]);
+    return pool.query('UPDATE author SET description = $1 WHERE author_id = $2', [descr, author_id]);
 };
 
 AuthorService.prototype.deleteAuthor = function(author_id) {
