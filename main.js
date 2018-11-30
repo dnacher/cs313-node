@@ -38,7 +38,7 @@ app.get('/books', (req, res) => {
 });
 
 //*********************************************************Authors functions*********************************************************
-// app.get('/author/:value', authorController.getAuthorById);
+app.get('/author/:value', authorController.getAuthorById);
 
 app.get('/author', authorController.getAuthors);
 
@@ -60,7 +60,7 @@ app.put('/item_type/:descr', itemTypeController.updateItemType);
 app.delete('/item_type/:item_type_id', itemTypeController.deleteItemType);
 
 //*********************************************************Item Functions*********************************************************
-// app.get('/item/:value', itemController.getItemById);
+app.get('/item/:value', itemController.getItemById);
  
 app.get('/item', itemController.getItems);
 
@@ -71,7 +71,7 @@ app.put('/item/:descr', itemController.updateItem);
 app.delete('/item/:item_id', itemController.deleteItem);
 
 //*********************************************************user_type Functions******************************************************
-// app.get('/user_type/:value', userTypeController.getUserTypeById);
+app.get('/user_type/:value', userTypeController.getUserTypeById);
 
 app.get('/user_type', userTypeController.getUserTypes);
 
@@ -82,7 +82,7 @@ app.put('/user_type/:descr', userTypeController.updateUserType);
 app.delete('/user_type/:user_type_id', userTypeController.deleteUserType);
 
 //*********************************************************user Functions**********************************************************
-// app.get('/user/:value',userController.getUserById);
+app.get('/user/:value',userController.getUserById);
 
 app.get('/user', userController.getUsers);
 
@@ -93,7 +93,7 @@ app.put('/user/:descr', userController.updateUser);
 app.delete('/user/:user_id', userController.deleteUser);
 
 //*********************************************************rent Functions*********************************************************
-// app.get('/rent/:value', rentController.getRentById);
+app.get('/rent/:value', rentController.getRentById);
 
 app.get('/rent',rentController.getRents);
 
