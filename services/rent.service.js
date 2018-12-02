@@ -16,7 +16,7 @@ RentService.prototype.getRentById = function( rent_id ) {
 };
 
 RentService.prototype.getRents = function() {
-    return pool.query('SELECT user_id,item_id, date_start,date_end FROM rent');
+    return pool.query('SELECT user_id,item_id, date_start,date_end FROM rent order by rent_id');
 };
 
 RentService.prototype.saveRent = function(user_id,item_id, date_start,date_end) {

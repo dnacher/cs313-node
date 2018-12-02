@@ -16,7 +16,7 @@ UserTypeService.prototype.getUserTypeById = function( user_type_id ) {
 };
 
 UserTypeService.prototype.getUserTypes = function() {
-    return pool.query('select user_type_id,name, description from user_type');
+    return pool.query('select user_type_id,name, description from user_type order by user_type_id');
 };
 
 UserTypeService.prototype.saveUserType = function(name, descr) {

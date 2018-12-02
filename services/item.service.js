@@ -16,7 +16,7 @@ ItemService.prototype.getItemById = function( item_id ) {
 };
 
 ItemService.prototype.getItems = function() {
-    return pool.query('select item_id,name, description from item');
+    return pool.query('select item_id,name, description from item order by item_id');
 };
 
 ItemService.prototype.saveItem = function(item_type_id,item_author_id,name, descr) {

@@ -16,7 +16,7 @@ AuthorService.prototype.getAuthorById = function( author_id ) {
 };
 
 AuthorService.prototype.getAuthors = function() {
-    return pool.query('select author_id,name, description from author');
+    return pool.query('select author_id,name, description from author order by author_id');
 };
 
 AuthorService.prototype.saveAuthor = function(name, descr) {

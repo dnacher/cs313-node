@@ -1,6 +1,7 @@
 <html>
     <head>
         <title>Author</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     </head>    
     <body>
         <div><h2>Author</h2></div>
@@ -9,32 +10,48 @@
             <input type="text" id="authorId">
             <button onclick="getAuthor()">Search</button>
             <button onclick="allAuthor()">display all authors</button>
+            <button onclick="toggle()">Create</button>
         </div>
         <br><br>
-        <div>
-            <span id="authorSpan"></span>
+        <div id="createForm" style="display:none;">
+            <h2>Create Author</h2>
+            <input type="text" id="name">
+            <input type="text" id="description">
+            <button onclick="createAuthor()">Create</button>
+            <br><br>
         </div>
-        <br>        
+
+
+        <div id="divResults">
+            <h2>Results</h2>
+            <ul id="ulResults">
+            </ul>
+        </div>
+        
         <script type="text/javascript">
 
             function getAuthor() {
                 // get author
-                var authorId = document.getElementById('authorId').value;
+                var authorId = $("#authorId").val();
                 console.log(authorId);
                 var xhr = new XMLHttpRequest();
                 console.log("Starting search for: " + authorId);
                 xhr.open('GET', 'author/' + authorId);
                 xhr.onload = function() {
                     console.log("got response!");
+                    var resultList = $("#ulResults");
+		            resultList.empty();
                     if (xhr.status === 200) {
                         var resp = JSON.parse(xhr.responseText);
-                        var authorSpan = document.getElementById('authorSpan');
-                        authorSpan.textContent = "Author: " + resp.author_id + " "  + resp.name + " " + resp.description;
+                        // var authorSpan = $('authorSpan').value;
+                        // authorSpan.textContent = "Author: " + resp.author_id + " "  + resp.name + " " + resp.description;
+                        var author = resp.author_id + " " + resp.name;
+			            resultList.append("<li><p>" + author + "</p></li>");
                     } else {
                         alert('Request failed.  Returned status of ' + xhr.status);
                     }
                 };
-                xhr.send();             
+                xhr.send();         
             }
 
             function allAuthor() {
@@ -46,18 +63,46 @@
                     if (xhr.status === 200) {
                         var comma = "";
                         var aText = "";
-                        var resp = JSON.parse(xhr.responseText);
-                        var authorSpan = document.getElementById('authorSpan');
+                        var resp = JSON.parse(xhr.responseText);                        
+                        var resultList = $("#ulResults");
+		                resultList.empty();
                         for ( var i = 0; i < resp.length; i++ ) {
-                            aText = aText + comma + + resp[i].author_id + " " + resp[i].name;
-                            comma = ", ";
+                            var author = resp[i].author_id + " " + resp[i].name;
+			                resultList.append("<li><p>" + author + "  <button onclick='deleteAuthor(" + resp[i].author_id + ")'>X</button></p></li>");
                         }
-                        authorSpan.textContent = aText;
                     } else {
                         alert('Request failed.  Returned status of ' + xhr.status);
                     }
                 };
-                xhr.send();             
+                xhr.send();
+            }
+
+           
+           function toggle() {
+                // get all author
+                $("#createForm").fadeToggle();
+            }
+
+            function createAuthor(){
+                // create author
+                var name = $("#name").val();
+                var description = $("#description").val();
+                console.log(name + " " + description);
+                var xhr = new XMLHttpRequest();
+                console.log("Starting search for: " + authorId);
+                xhr.open('POST', 'author/' + name + "/" + description);                          
+                xhr.send();                 
+                toggle();    
+                allAuthor();            
+            }  
+            
+            function deleteAuthor(authorId){
+                // delete author                
+                console.log("Deleting author_id" + authorId);
+                var xhr = new XMLHttpRequest();
+                xhr.open('DELETE', 'author/' + authorId);                          
+                xhr.send();                
+                allAuthor();  
             }
         </script>
     </body>    

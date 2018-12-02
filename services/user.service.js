@@ -16,7 +16,7 @@ UserService.prototype.getUserById = function( user_id ) {
 };
 
 UserService.prototype.getUsers = function() {
-    return pool.query('select user_id,user_type_id,name, description from users');
+    return pool.query('select user_id,user_type_id,name, description from users order by user_id');
 };
 
 UserService.prototype.saveUser = function(user_type_id,name, descr,password) {
