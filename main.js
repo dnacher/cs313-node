@@ -1,7 +1,6 @@
 const express = require('express');
 const path = require('path');
 const PORT = process.env.PORT || 5000;
-// const authorRoutes = require('./routes/author');
 
 const authorController = require('./controller/authorController.js');
 const itemTypeController = require('./controller/itemTypeController.js');
@@ -9,17 +8,30 @@ const itemController = require('./controller/itemController.js');
 const userTypeController = require('./controller/userTypeController.js');
 const userController = require('./controller/userController.js');
 const rentController = require('./controller/rentController.js');
+const serverSession = require('./server/server.js')
 
 var app = express();
-app.use(express.static(path.join(__dirname,"public")))
-// app.use('/', authorRoutes);
+//var expressValidator = require('express-session');
+//var expressSession = require('express-session');
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.use(express.static(path.join(__dirname,"/public")))
+//app.use(expressValidator());
+//app.use(expressSession({secret: 'secret', saveUninitialized: false, resave:false}));
+
+//Middleware
+
+//Routes
 app.get('/', (req, res) => {
     console.log(`on root`);
     res.render('pages/index');
+});
+
+app.get('/login', (req, res) => {
+    console.log(`on root`);
+    res.render('pages/login');
 });
 
 app.get('/index', (req, res) => {
@@ -32,10 +44,26 @@ app.get('/authors', (req, res) => {
     res.render('pages/author');
 });
 
-app.get('/books', (req, res) => {
-    console.log(`on book page`);
-    res.render('pages/book');
+app.get('/items', (req, res) => {
+    console.log(`on item page`);
+    res.render('pages/item');
 });
+
+app.get('/itemsType', (req, res) => {
+    console.log(`on item type page`);
+    res.render('pages/itemType');
+});
+
+//Server sessions.
+// Setup our routes
+app.post('/login', serverSession.handleLogin);
+app.post('/logout', serverSession.handleLogout);
+app.get('/verifyLogin', serverSession.verifyLogin);
+
+// This method has a middleware function "verifyLogin" that will be called first
+app.get('/getServerTime', serverSession.getServerTime);
+
+
 
 //*********************************************************Authors functions*********************************************************
 app.get('/author/:value', authorController.getAuthorById);
@@ -85,6 +113,8 @@ app.delete('/user_type/:user_type_id', userTypeController.deleteUserType);
 app.get('/user/:value',userController.getUserById);
 
 app.get('/user', userController.getUsers);
+
+app.get('/user/name/:value', userController.getUserByName)
 
 app.post('/user/:user_type_id/:name/:descr/:password', userController.saveUser);
 

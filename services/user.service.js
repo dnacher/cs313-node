@@ -9,10 +9,15 @@ const pool = new Pool({
     ssl: true
 });
 
+
 function UserService() {};
 
 UserService.prototype.getUserById = function( user_id ) {
     return pool.query('select user_id,user_type_id,name, description from users where user_id = $1', [user_id]);
+};
+
+UserService.prototype.getUserByName = function( user_name ) {
+    return pool.query('select user_id,user_type_id,name, description,password from users where name = $1', [user_name]);
 };
 
 UserService.prototype.getUsers = function() {

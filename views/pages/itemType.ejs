@@ -1,27 +1,27 @@
 <html>
     <head>
-        <title>Author</title>
+        <title>Item Type</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
     </head>    
     <body>
-        <div><h2>Author</h2></div>
+        <div><h2>Item Type</h2></div>
         <% include menu.ejs%>         
         <div>
-            <input type="text" id="authorId">
-            <button onclick="getAuthor()" class="btn btn-success">Search</button><br><br>
-            <button onclick="getAuthors()" class="btn btn-primary">display all authors</button><br><br>
+            <input type="text" id="itemTypeId">
+            <button onclick="getItemType()" class="btn btn-success">Search</button><br><br>
+            <button onclick="getItemTypes()" class="btn btn-primary">display all Items Type</button><br><br>
             <button onclick="toggle()" class="btn btn-primary">Create</button><br><br>
         </div>
         <br><br>
         <div id="createForm" style="display:none;" class="form-group">
-            <h2>Create Author</h2>
+            <h2>Create Item Type</h2>
             <label for="name" class="col-sm-2 col-form-label">Name</label>
             <input type="text" id="name"><br>
             <label for="description" class="col-sm-2 col-form-label">Description</label>
             <input type="text" id="description"><br>
             <label for="name" class="col-sm-2 col-form-label"></label>
-            <button onclick="createAuthor()" class="col-sm-2  btn btn-success">Create</button>
+            <button onclick="createItemType()" class="col-sm-2  btn btn-success">Create</button>
             <br><br>
         </div>
 
@@ -34,23 +34,21 @@
         
         <script type="text/javascript">
 
-            function getAuthor() {
-                // get author
-                var authorId = $("#authorId").val();
-                console.log(authorId);
+            function getItemType() {
+                // get item Type
+                var itemTypeId = $("#itemTypeId").val();
+                console.log(itemTypeId);
                 var xhr = new XMLHttpRequest();
-                console.log("Starting search for: " + authorId);
-                xhr.open('GET', 'author/' + authorId);
+                console.log("Starting search for: " + itemTypeId);
+                xhr.open('GET', 'item_type/' + itemTypeId);
                 xhr.onload = function() {
                     console.log("got response!");
                     var resultList = $("#ulResults");
 		            resultList.empty();
                     if (xhr.status === 200) {
                         var resp = JSON.parse(xhr.responseText);
-                        // var authorSpan = $('authorSpan').value;
-                        // authorSpan.textContent = "Author: " + resp.author_id + " "  + resp.name + " " + resp.description;
-                        var author = resp.author_id + " " + resp.name;
-			            resultList.append("<li><p>" + author + "</p></li>");
+                        var itemType = resp.item_type_id + " " + resp.name;
+			            resultList.append("<li><p>" + itemType + "</p></li>");
                     } else {
                         alert('Request failed.  Returned status of ' + xhr.status);
                     }
@@ -58,10 +56,10 @@
                 xhr.send();         
             }
 
-             function getAuthors() {
-                // get all Authors
+            function getItemTypes() {
+                // get all Item Types
                 var xhr = new XMLHttpRequest();                
-                xhr.open('GET', 'author/');
+                xhr.open('GET', 'item_type/');
                 xhr.onload = function() {
                     console.log("got response!");
                     if (xhr.status === 200) {
@@ -71,8 +69,8 @@
                         var resultList = $("#ulResults");
 		                resultList.empty();
                         for ( var i = 0; i < resp.length; i++ ) {
-                            var author = resp[i].author_id + " " + resp[i].name;
-			                resultList.append("<li><p>" + author + "  <button onclick='deleteAuthor(" + resp[i].author_id + ")' class='btn btn-danger'>Delete</button></p></li>");
+                            var itemType = resp[i].item_type_id + " " + resp[i].name;
+			                resultList.append("<li><p>" + itemType + "  <button onclick='deleteItemType(" + resp[i].item_type_id + ")' class='btn btn-danger'>Delete</button></p></li>");
                         }
                     } else {
                         alert('Request failed.  Returned status of ' + xhr.status);
@@ -83,30 +81,30 @@
 
            
            function toggle() {
-                // get all author
+                // get all items type
                 $("#createForm").fadeToggle();
             }
 
-            function createAuthor(){
-                // create author
+            function createItemType(){
+                // create Item Type
                 var name = $("#name").val();
                 var description = $("#description").val();
                 console.log(name + " " + description);
                 var xhr = new XMLHttpRequest();
-                console.log("Starting search for: " + authorId);
-                xhr.open('POST', 'author/' + name + "/" + description);                          
+                console.log("Starting search for: " + itemTypeId);
+                xhr.open('POST', 'item_type/' + name + "/" + description);                          
                 xhr.send();                 
                 toggle();    
-                allAuthor();            
+                getItemTypes();            
             }  
             
-            function deleteAuthor(authorId){
-                // delete author                
-                console.log("Deleting author_id" + authorId);
+            function deleteItemType(itemTypeId){
+                // delete item Type                
+                console.log("Deleting item_type_id" + itemTypeId);
                 var xhr = new XMLHttpRequest();
-                xhr.open('DELETE', 'author/' + authorId);                          
+                xhr.open('DELETE', 'item_type/' + itemTypeId);                          
                 xhr.send();                
-                allAuthor();  
+                getItemTypes();
             }
         </script>
     </body>    

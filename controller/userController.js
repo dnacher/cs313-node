@@ -13,6 +13,19 @@ function getUserById(req, res) {
     });    
 }
 
+function getUserByName(req, res) {
+    var value= req.params.value;
+    console.log("user by name");
+    console.log(value);
+    userSrvc.getUserByName(value).then(resp => { 
+        console.log("Response: " + JSON.stringify(resp.rows[0]));
+        res.end(JSON.stringify(resp.rows[0]));
+    })
+    .catch(e => {
+        console.log("Error: " + e);
+    });    
+}
+
 function getUsers(req, res) {
     console.log("all user");
     userSrvc.getUsers().then(resp => { 
@@ -64,8 +77,25 @@ function deleteUser(req, res) {
     });
 }
 
+function login(request, response) {
+	var result = {success: false};
+
+    var user = this.getUserByName(request.body.username);
+
+
+	// We should do better error checking here to make sure the parameters are present
+	// if (request.body.username == "admin" && request.body.password == "password") {
+	// 	request.session.user = request.body.username;
+	// 	result = {success: true};
+	// }
+
+    response.json(result);
+    response.json(user);
+}
+
 module.exports = {
     getUserById: getUserById,
+    getUserByName: getUserByName,
     getUsers: getUsers,
     saveUser: saveUser,
     updateUser: updateUser,

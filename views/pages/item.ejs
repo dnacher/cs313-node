@@ -1,27 +1,27 @@
 <html>
     <head>
-        <title>Author</title>
+        <title>Book</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
     </head>    
     <body>
-        <div><h2>Author</h2></div>
+        <div><h2>Book</h2></div>
         <% include menu.ejs%>         
         <div>
-            <input type="text" id="authorId">
-            <button onclick="getAuthor()" class="btn btn-success">Search</button><br><br>
-            <button onclick="getAuthors()" class="btn btn-primary">display all authors</button><br><br>
+            <input type="text" id="bookId">
+            <button onclick="getBook()" class="btn btn-success">Search</button><br><br>
+            <button onclick="getBooks()" class="btn btn-primary">display all authors</button><br><br>
             <button onclick="toggle()" class="btn btn-primary">Create</button><br><br>
         </div>
         <br><br>
         <div id="createForm" style="display:none;" class="form-group">
-            <h2>Create Author</h2>
-            <label for="name" class="col-sm-2 col-form-label">Name</label>
-            <input type="text" id="name"><br>
-            <label for="description" class="col-sm-2 col-form-label">Description</label>
-            <input type="text" id="description"><br>
+            <h2>Create Book</h2>
+            <label for="title" class="col-sm-2 col-form-label">Title</label>
+            <input type="text" id="title"><br>
+            <label for="subtitle" class="col-sm-2 col-form-label">Subtitle</label>
+            <input type="text" id="subtitle"><br>
             <label for="name" class="col-sm-2 col-form-label"></label>
-            <button onclick="createAuthor()" class="col-sm-2  btn btn-success">Create</button>
+            <button onclick="createBook()" class="col-sm-2  btn btn-success">Create</button>
             <br><br>
         </div>
 
@@ -34,23 +34,21 @@
         
         <script type="text/javascript">
 
-            function getAuthor() {
-                // get author
-                var authorId = $("#authorId").val();
-                console.log(authorId);
+            function getBook() {
+                // get book
+                var bookId = $("#bookId").val();
+                console.log(bookId);
                 var xhr = new XMLHttpRequest();
-                console.log("Starting search for: " + authorId);
-                xhr.open('GET', 'author/' + authorId);
+                console.log("Starting search for: " + bookId);
+                xhr.open('GET', 'book/' + bookId);
                 xhr.onload = function() {
                     console.log("got response!");
                     var resultList = $("#ulResults");
 		            resultList.empty();
                     if (xhr.status === 200) {
                         var resp = JSON.parse(xhr.responseText);
-                        // var authorSpan = $('authorSpan').value;
-                        // authorSpan.textContent = "Author: " + resp.author_id + " "  + resp.name + " " + resp.description;
-                        var author = resp.author_id + " " + resp.name;
-			            resultList.append("<li><p>" + author + "</p></li>");
+                        var book = resp.book_id + " " + resp.title;
+			            resultList.append("<li><p>" + book + "  <button onclick='deleteBook(" + resp.book_id + ")'>X</button></p></li>");
                     } else {
                         alert('Request failed.  Returned status of ' + xhr.status);
                     }
@@ -58,10 +56,10 @@
                 xhr.send();         
             }
 
-             function getAuthors() {
-                // get all Authors
+            function getBooks() {
+                // get all books
                 var xhr = new XMLHttpRequest();                
-                xhr.open('GET', 'author/');
+                xhr.open('GET', 'books/');
                 xhr.onload = function() {
                     console.log("got response!");
                     if (xhr.status === 200) {
@@ -71,8 +69,8 @@
                         var resultList = $("#ulResults");
 		                resultList.empty();
                         for ( var i = 0; i < resp.length; i++ ) {
-                            var author = resp[i].author_id + " " + resp[i].name;
-			                resultList.append("<li><p>" + author + "  <button onclick='deleteAuthor(" + resp[i].author_id + ")' class='btn btn-danger'>Delete</button></p></li>");
+                            var book = resp[i].book_id + " " + resp[i].title;
+			                resultList.append("<li><p>" + book + "  <button onclick='deleteBook(" + resp[i].book_id + ")'>X</button></p></li>");
                         }
                     } else {
                         alert('Request failed.  Returned status of ' + xhr.status);
@@ -87,14 +85,15 @@
                 $("#createForm").fadeToggle();
             }
 
-            function createAuthor(){
-                // create author
-                var name = $("#name").val();
-                var description = $("#description").val();
-                console.log(name + " " + description);
+            function createBook(){
+                // create book
+                var title = $("#title").val();
+                var description = $("#subtitle").val();
+                console.log(title + " " + subtitle);
+
                 var xhr = new XMLHttpRequest();
-                console.log("Starting search for: " + authorId);
-                xhr.open('POST', 'author/' + name + "/" + description);                          
+                console.log("Starting search for: " + bookId);
+                xhr.open('POST', 'book/' + title + "/" + subtitle);                          
                 xhr.send();                 
                 toggle();    
                 allAuthor();            
