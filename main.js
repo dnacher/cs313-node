@@ -11,15 +11,11 @@ const rentController = require('./controller/rentController.js');
 const serverSession = require('./server/server.js')
 
 var app = express();
-//var expressValidator = require('express-session');
-//var expressSession = require('express-session');
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(express.static(path.join(__dirname,"/public")))
-//app.use(expressValidator());
-//app.use(expressSession({secret: 'secret', saveUninitialized: false, resave:false}));
 
 //Middleware
 
@@ -62,7 +58,6 @@ app.get('/verifyLogin', serverSession.verifyLogin);
 
 // This method has a middleware function "verifyLogin" that will be called first
 app.get('/getServerTime', serverSession.getServerTime);
-
 
 
 //*********************************************************Authors functions*********************************************************

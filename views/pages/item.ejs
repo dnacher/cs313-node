@@ -3,10 +3,15 @@
         <title>Book</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+        <script src="/js/bootstrap.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
     </head>    
-    <body>
-        <div><h2>Book</h2></div>
-        <% include menu.ejs%>         
+    <body>        
+        <% include menu.ejs%>
+        <% include endmenu.ejs%>
+        <div><h2>Book</h2></div><br>         
         <div>
             <input type="text" id="bookId">
             <button onclick="getBook()" class="btn btn-success">Search</button><br><br>
@@ -20,7 +25,11 @@
             <input type="text" id="title"><br>
             <label for="subtitle" class="col-sm-2 col-form-label">Subtitle</label>
             <input type="text" id="subtitle"><br>
-            <label for="name" class="col-sm-2 col-form-label"></label>
+            <label for="itemTypeId" class="col-sm-2 col-form-label">Item Type</label>            
+            <select name="items" id="itemTypeId"></select><br>
+            <label for="authorId" class="col-sm-2 col-form-label">Author</label>            
+            <select name="authors" id="authorId"></select><br>
+            <label class="col-sm-2 col-form-label"></label>  
             <button onclick="createBook()" class="col-sm-2  btn btn-success">Create</button>
             <br><br>
         </div>
@@ -33,6 +42,52 @@
         </div>
         
         <script type="text/javascript">
+
+            function getAuthors() {
+                // get all Authors
+                var xhr = new XMLHttpRequest();                
+                xhr.open('GET', 'author/');
+                xhr.onload = function() {
+                    console.log("got response!");
+                    if (xhr.status === 200) {
+                        var comma = "";
+                        var aText = "";
+                        var resp = JSON.parse(xhr.responseText);                        
+                        var resultList = $("#authorId");
+		                resultList.empty();
+                        for ( var i = 0; i < resp.length; i++ ) {
+                            var author = resp[i].author_id + " " + resp[i].name;
+			                resultList.append("<option value=" + resp[i].author_id + ">" + resp[i].name + "</option>");
+                        }
+                    } else {
+                        alert('Request failed.  Returned status of ' + xhr.status);
+                    }
+                };
+                xhr.send();
+            }
+
+            function getItemTypes() {
+                // get all Item Types
+                var xhr = new XMLHttpRequest();                
+                xhr.open('GET', 'item_type/');
+                xhr.onload = function() {
+                    console.log("got response!");
+                    if (xhr.status === 200) {
+                        var comma = "";
+                        var aText = "";
+                        var resp = JSON.parse(xhr.responseText);                        
+                        var resultList = $("#itemTypeId");
+		                resultList.empty();
+                        for ( var i = 0; i < resp.length; i++ ) {
+                            var itemType = resp[i].item_type_id + " " + resp[i].name;
+                            resultList.append("<option value=" + resp[i].item_type_id + ">" + resp[i].name + "</option>");
+                        }
+                    } else {
+                        alert('Request failed.  Returned status of ' + xhr.status);
+                    }
+                };
+                xhr.send();
+            }
 
             function getBook() {
                 // get book
@@ -81,6 +136,8 @@
 
            
            function toggle() {
+               getAuthors();
+               getItemTypes();
                 // get all author
                 $("#createForm").fadeToggle();
             }
@@ -89,8 +146,8 @@
                 // create book
                 var title = $("#title").val();
                 var description = $("#subtitle").val();
-                console.log(title + " " + subtitle);
-
+                var authorId = $("#authorId").val();
+                console.log(title + " " + subtitle + " " + authorId);
                 var xhr = new XMLHttpRequest();
                 console.log("Starting search for: " + bookId);
                 xhr.open('POST', 'book/' + title + "/" + subtitle);                          

@@ -5,8 +5,10 @@
         <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
     </head>    
     <body>
-        <div><h2>Author</h2></div>
-        <% include menu.ejs%>         
+        <div id="container">        
+        <% include menu.ejs%>   
+        <% include endmenu.ejs%>
+        <div><h2>Author</h2></div><br>      
         <div>
             <input type="text" id="authorId">
             <button onclick="getAuthor()" class="btn btn-success">Search</button><br><br>
@@ -47,8 +49,6 @@
 		            resultList.empty();
                     if (xhr.status === 200) {
                         var resp = JSON.parse(xhr.responseText);
-                        // var authorSpan = $('authorSpan').value;
-                        // authorSpan.textContent = "Author: " + resp.author_id + " "  + resp.name + " " + resp.description;
                         var author = resp.author_id + " " + resp.name;
 			            resultList.append("<li><p>" + author + "</p></li>");
                     } else {
@@ -58,7 +58,7 @@
                 xhr.send();         
             }
 
-             function getAuthors() {
+            function getAuthors() {
                 // get all Authors
                 var xhr = new XMLHttpRequest();                
                 xhr.open('GET', 'author/');
@@ -109,5 +109,6 @@
                 allAuthor();  
             }
         </script>
+        </div>
     </body>    
 </html>

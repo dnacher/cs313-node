@@ -4,9 +4,10 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
     </head>    
-    <body>
-        <div><h2>Item Type</h2></div>
-        <% include menu.ejs%>         
+    <body>        
+        <% include menu.ejs%> 
+        <% include endmenu.ejs%>
+        <div><h2>Item Type</h2></div><br>        
         <div>
             <input type="text" id="itemTypeId">
             <button onclick="getItemType()" class="btn btn-success">Search</button><br><br>
