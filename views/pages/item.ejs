@@ -15,16 +15,16 @@
         <div>
             <input type="text" id="bookId">
             <button onclick="getBook()" class="btn btn-success">Search</button><br><br>
-            <button onclick="getBooks()" class="btn btn-primary">display all authors</button><br><br>
+            <button onclick="getBooks()" class="btn btn-primary">display all Items</button><br><br>
             <button onclick="toggle()" class="btn btn-primary">Create</button><br><br>
         </div>
         <br><br>
         <div id="createForm" style="display:none;" class="form-group">
             <h2>Create Book</h2>
-            <label for="title" class="col-sm-2 col-form-label">Title</label>
-            <input type="text" id="title"><br>
-            <label for="subtitle" class="col-sm-2 col-form-label">Subtitle</label>
-            <input type="text" id="subtitle"><br>
+            <label for="name" class="col-sm-2 col-form-label">Name</label>
+            <input type="text" id="name"><br>
+            <label for="description" class="col-sm-2 col-form-label">Description</label>
+            <input type="text" id="description"><br>
             <label for="itemTypeId" class="col-sm-2 col-form-label">Item Type</label>            
             <select name="items" id="itemTypeId"></select><br>
             <label for="authorId" class="col-sm-2 col-form-label">Author</label>            
@@ -102,7 +102,7 @@
 		            resultList.empty();
                     if (xhr.status === 200) {
                         var resp = JSON.parse(xhr.responseText);
-                        var book = resp.book_id + " " + resp.title;
+                        var book = resp.book_id + " " + resp.name;
 			            resultList.append("<li><p>" + book + "  <button onclick='deleteBook(" + resp.book_id + ")'>X</button></p></li>");
                     } else {
                         alert('Request failed.  Returned status of ' + xhr.status);
@@ -124,7 +124,7 @@
                         var resultList = $("#ulResults");
 		                resultList.empty();
                         for ( var i = 0; i < resp.length; i++ ) {
-                            var book = resp[i].book_id + " " + resp[i].title;
+                            var book = resp[i].book_id + " " + resp[i].name;
 			                resultList.append("<li><p>" + book + "  <button onclick='deleteBook(" + resp[i].book_id + ")'>X</button></p></li>");
                         }
                     } else {
@@ -144,13 +144,14 @@
 
             function createBook(){
                 // create book
-                var title = $("#title").val();
-                var description = $("#subtitle").val();
+                var name = $("#name").val();
+                var description = $("#description").val();
                 var authorId = $("#authorId").val();
-                console.log(title + " " + subtitle + " " + authorId);
+                var itemTypeId = $("#itemTypeId").val();
+                console.log("name: " + name + " description: " + description + " author id: " + authorId);
                 var xhr = new XMLHttpRequest();
                 console.log("Starting search for: " + bookId);
-                xhr.open('POST', 'book/' + title + "/" + subtitle);                          
+                xhr.open('POST', 'item/' + itemTypeId + "/" + authorId + "/" + name + "/" + description);                          
                 xhr.send();                 
                 toggle();    
                 allAuthor();            

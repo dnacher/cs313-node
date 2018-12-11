@@ -1,28 +1,34 @@
+//express
 const express = require('express');
+var app = express();
+//session
+var session = require('express-session');
+//path
 const path = require('path');
+//port
 const PORT = process.env.PORT || 5000;
-
+//controllers
 const authorController = require('./controller/authorController.js');
 const itemTypeController = require('./controller/itemTypeController.js');
 const itemController = require('./controller/itemController.js');
 const userTypeController = require('./controller/userTypeController.js');
 const userController = require('./controller/userController.js');
 const rentController = require('./controller/rentController.js');
-const serverSession = require('./server/server.js')
 
-var app = express();
-
+//setters
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-
+//use
 app.use(express.static(path.join(__dirname,"/public")))
+//Session
+app.use(session({secret: 'ssshhhhh'}));
 
 //Middleware
 
 //Routes
-app.get('/', (req, res) => {
+app.get('/', (req, res) => {    
     console.log(`on root`);
-    res.render('pages/index');
+    res.render('pages/login');
 });
 
 app.get('/login', (req, res) => {
@@ -31,8 +37,17 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/index', (req, res) => {
-    console.log(`on root`);
+    sess = req.session;
+    if(sess.email) {
+    res.write('<h1>Hello '+sess.email+'</h1>');
+    console.log(`on root with session`);
     res.render('pages/index');
+    //res.end('<a href="+">Logout</a>');
+    } else {
+        res.write('<h1>Please login first.</h1>');
+        res.end('<a href="/login">Login</a>');
+    }
+    
 });
 
 app.get('/authors', (req, res) => {
@@ -51,13 +66,13 @@ app.get('/itemsType', (req, res) => {
 });
 
 //Server sessions.
-// Setup our routes
-app.post('/login', serverSession.handleLogin);
-app.post('/logout', serverSession.handleLogout);
-app.get('/verifyLogin', serverSession.verifyLogin);
+//Setup our routes
+//app.post('/login', serverSession.handleLogin);
+//app.post('/logout', serverSession.handleLogout);
+//app.get('/verifyLogin', serverSession.verifyLogin);
 
-// This method has a middleware function "verifyLogin" that will be called first
-app.get('/getServerTime', serverSession.getServerTime);
+//This method has a middleware function "verifyLogin" that will be called first
+//app.get('/getServerTime', serverSession.getServerTime);
 
 
 //*********************************************************Authors functions*********************************************************
@@ -87,7 +102,7 @@ app.get('/item/:value', itemController.getItemById);
  
 app.get('/item', itemController.getItems);
 
-app.post('/item/:item_type_id/:item_author_id/:name/:descr',itemController.saveItem);
+app.post('/item/:item_type_id/:item_author_id/:title/:subtitle',itemController.saveItem);
 
 app.put('/item/:item_id/:descr', itemController.updateItem);
 
