@@ -1,7 +1,7 @@
 <html>
     <head>
         <title>Index</title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <% include head.ejs %>
     </head>    
     <body>
         
@@ -10,6 +10,8 @@
             <a class="nav-link" href="login">Login</a>
         </li> 
         <% include endmenu.ejs%>
+        <% include container.ejs%>
         <div><h2>Index</h2></div><br>
+        <% include endcontainer.ejs%>
     </body>    
 </html>

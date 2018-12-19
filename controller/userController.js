@@ -1,4 +1,5 @@
 const userSrvc = require('../services/user.service');
+const bcrypt = require('bcrypt');
 
 function getUserById(req, res) {
     var value= req.params.value;
@@ -26,6 +27,21 @@ function getUserByName(req, res) {
     });    
 }
 
+function checkPassword(req, res){
+    console.log("check password");
+    var hash = req.params.hash;
+    var password = req.params.password;
+    var ret;     
+    bcrypt.compare(password, hash, function(err, res) {
+        if(res === true) {
+            ret = true;
+        } else {
+            ret = false;                
+        } 
+    });
+    console.log(ret);
+}
+
 function getUsers(req, res) {
     console.log("all user");
     userSrvc.getUsers().then(resp => { 
@@ -42,8 +58,9 @@ function saveUser(req, res) {
     var name = req.params.name;
     var descr = req.params.descr;
     var pass = req.params.password;
+    var hash = bcrypt.hashSync(pass, 10);
     console.log("Inserting User: name: " + name + " descr: " + descr + " user_type_id: " + user_type_id);
-    userSrvc.saveUser(user_type_id,name,descr,pass).then(resp => { 
+    userSrvc.saveUser(user_type_id,name,descr,hash).then(resp => { 
         console.log("Done!");
         res.end("done");
     })
@@ -53,10 +70,10 @@ function saveUser(req, res) {
 }
 
 function updateUser(req, res) {
-    var descr = req.params.descr;
+    var user_type_id = req.params.usertype;
     var user_id = req.params.user_id;
-    console.log("updating user: " + user_id + " " + descr);
-    userSrvc.updateUser(user_id,descr).then(resp => { 
+    console.log("updating user: " + user_id + " " + user_type_id);
+    userSrvc.updateUser(user_id,user_type_id).then(resp => { 
         console.log("Done!");
         res.end("done");
     })
@@ -79,18 +96,8 @@ function deleteUser(req, res) {
 
 function login(request, response) {
 	var result = {success: false};
-
     var user = this.getUserByName(request.body.username);
-
-
-	// We should do better error checking here to make sure the parameters are present
-	// if (request.body.username == "admin" && request.body.password == "password") {
-	// 	request.session.user = request.body.username;
-	// 	result = {success: true};
-	// }
-
-    response.json(result);
-    response.json(user);
+    
 }
 
 module.exports = {
@@ -99,5 +106,6 @@ module.exports = {
     getUsers: getUsers,
     saveUser: saveUser,
     updateUser: updateUser,
-    deleteUser: deleteUser
+    deleteUser: deleteUser,
+    checkPassword:checkPassword
 }

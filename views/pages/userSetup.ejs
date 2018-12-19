@@ -1,0 +1,89 @@
+<html>
+    <head>
+        <title>Book</title>
+        <% include head.ejs %>
+    </head>    
+    <body>        
+        <% include menu.ejs%>
+        <% include endmenu.ejs%>
+        <% include container.ejs%>
+        <div><h2>User Setup</h2></div><br>
+        <br><br>
+        <button onclick="toggle()" class="col-sm-2  btn btn-success">Select a user</button><br><br>
+        <div id="createForm" style="display:none;" class="form-group">
+            <h2>Select the user type for a User</h2><br>
+            <label for="userId" class="col-sm-2 col-form-label">User</label>            
+            <select name="users" id="userId"></select><br>
+            <label for="userTypeId" class="col-sm-2 col-form-label">User Type</label>            
+            <select name="userTypes" id="userTypeId"></select><br>
+            <label class="col-sm-2 col-form-label"></label>  
+            <button onclick="updateUser()" class="col-sm-2  btn btn-success">Update</button>
+            <br><br>
+        </div>
+        <% include endcontainer.ejs%>
+        <script type="text/javascript">
+
+            function toggle() {              
+                getUsers();
+                getUserTypes();
+                $("#createForm").fadeToggle();
+            }
+
+            function getUsers() {
+                // get all Users
+                var xhr = new XMLHttpRequest();                
+                xhr.open('GET', 'user/');
+                xhr.onload = function() {
+                    console.log("got response!");
+                    if (xhr.status === 200) {
+                        var comma = "";
+                        var aText = "";
+                        var resp = JSON.parse(xhr.responseText);                        
+                        var resultList = $("#userId");
+		                resultList.empty();
+                        for ( var i = 0; i < resp.length; i++ ) {
+                            var itemType = resp[i].user_id + " " + resp[i].name;
+                            resultList.append("<option value=" + resp[i].user_id + ">" + resp[i].name + "</option>");
+                        }
+                    } else {
+                        alert('Request failed.  Returned status of ' + xhr.status);
+                    }
+                };
+                xhr.send();
+            }
+
+            function getUserTypes() {
+                // get all User Types
+                var xhr = new XMLHttpRequest();                
+                xhr.open('GET', 'user_type/');
+                xhr.onload = function() {
+                    console.log("got response!");
+                    if (xhr.status === 200) {
+                        var comma = "";
+                        var aText = "";
+                        var resp = JSON.parse(xhr.responseText);                        
+                        var resultList = $("#userTypeId");
+		                resultList.empty();
+                        for ( var i = 0; i < resp.length; i++ ) {
+                            resultList.append("<option value=" + resp[i].user_type_id + ">" + resp[i].name + "</option>");
+                        }
+                    } else {
+                        alert('Request failed.  Returned status of ' + xhr.status);
+                    }
+                };
+                xhr.send();
+            }
+           
+            function updateUser(){
+                // update User
+                var user_id = $("#userId").val();
+                var user_type_id = $("#userTypeId").val();
+                console.log("user: " + user_id + " userType: " + user_type_id);
+                var xhr = new XMLHttpRequest();
+                console.log("Starting search for: " + user_id);
+                xhr.open('PUT', 'user/' + user_id + "/" + user_type_id);                          
+                xhr.send();            
+            }  
+        </script>
+    </body>    
+</html>

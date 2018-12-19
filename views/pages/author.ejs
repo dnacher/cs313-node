@@ -1,39 +1,44 @@
 <html>
     <head>
         <title>Author</title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+        <% include head.ejs %>
     </head>    
-    <body>
-        <div id="container">        
+    <body>   
         <% include menu.ejs%>   
         <% include endmenu.ejs%>
-        <div><h2>Author</h2></div><br>      
-        <div>
-            <input type="text" id="authorId">
-            <button onclick="getAuthor()" class="btn btn-success">Search</button><br><br>
-            <button onclick="getAuthors()" class="btn btn-primary">display all authors</button><br><br>
-            <button onclick="toggle()" class="btn btn-primary">Create</button><br><br>
-        </div>
-        <br><br>
-        <div id="createForm" style="display:none;" class="form-group">
-            <h2>Create Author</h2>
-            <label for="name" class="col-sm-2 col-form-label">Name</label>
-            <input type="text" id="name"><br>
-            <label for="description" class="col-sm-2 col-form-label">Description</label>
-            <input type="text" id="description"><br>
-            <label for="name" class="col-sm-2 col-form-label"></label>
-            <button onclick="createAuthor()" class="col-sm-2  btn btn-success">Create</button>
+
+        <% include container.ejs%>
+            <div><h2>Author</h2></div><br>      
+            <div>
+                <% include submenu.ejs%>    
+                    <li class="nav-item active">
+                        <button onclick="getAuthors()" class="btn btn-success">Display all authors</button><br><br>
+                    </li>
+                    <li class="nav-item">
+                        <button onclick="toggle()" class="btn btn-primary">Create</button><br><br>
+                    </li> 
+                <% include endsubmenu.ejs%>            
+                <input type="text" id="authorId">
+                <button onclick="getAuthor()" class="btn btn-success">Search</button><br><br>                        
+            </div>
             <br><br>
-        </div>
-
-
-        <div id="divResults">
-            <h2>Results</h2>
-            <ul id="ulResults">
-            </ul>
-        </div>
-        
+            <div id="createForm" style="display:none;" class="form-group">
+                <h2>Create Author</h2>
+                <label for="name" class="col-sm-2 col-form-label">Name</label>
+                <input type="text" id="name"><br>
+                <label for="description" class="col-sm-2 col-form-label">Description</label>
+                <input type="text" id="description"><br>
+                <label for="name" class="col-sm-2 col-form-label"></label>
+                <button onclick="createAuthor()" class="col-sm-2  btn btn-success">Create</button>
+                <br><br>
+            </div>
+            
+            <div id="divResults">
+                <h2>Results</h2>
+                <div class="container" id="ulResults">
+                </div>
+            </div>
+        <% include endcontainer.ejs%>  
         <script type="text/javascript">
 
             function getAuthor() {
@@ -49,8 +54,10 @@
 		            resultList.empty();
                     if (xhr.status === 200) {
                         var resp = JSON.parse(xhr.responseText);
-                        var author = resp.author_id + " " + resp.name;
-			            resultList.append("<li><p>" + author + "</p></li>");
+                        //row header
+			            resultList.append("<div class='row'><div class='col-sm'><strong> Id </div><div class='col-sm'>Name </div></strong></div><br>");
+
+                        resultList.append("<div class='row'><div class='col-sm'>" + resp.author_id + "</div><div class='col-sm'>" + resp.name + "</div></div>");
                     } else {
                         alert('Request failed.  Returned status of ' + xhr.status);
                     }
@@ -69,10 +76,10 @@
                         var aText = "";
                         var resp = JSON.parse(xhr.responseText);                        
                         var resultList = $("#ulResults");
-		                resultList.empty();
+                        resultList.empty();
+                        resultList.append("<strong><div class='row'><div class='col-sm'>Id</div><div class='col-sm'>Name</div><div class='col-sm'>Action</div></div></strong>");
                         for ( var i = 0; i < resp.length; i++ ) {
-                            var author = resp[i].author_id + " " + resp[i].name;
-			                resultList.append("<li><p>" + author + "  <button onclick='deleteAuthor(" + resp[i].author_id + ")' class='btn btn-danger'>Delete</button></p></li>");
+                            resultList.append("<div class='row'><div class='col-sm'>" + resp[i].author_id + "</div><div class='col-sm'>" + resp[i].name + "</div><div class='col-sm'><button onclick='deleteAuthor(" + resp[i].author_id + ")' class='btn btn-danger'>Delete</button></div></div><br>");
                         }
                     } else {
                         alert('Request failed.  Returned status of ' + xhr.status);

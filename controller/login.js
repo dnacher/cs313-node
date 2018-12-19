@@ -26,6 +26,8 @@ function logout() {
 	});
 }
 
+
+
 function getServerTime() {
 	$.get("/getServerTime", function(result) {
 		if (result && result.success) {
@@ -36,4 +38,13 @@ function getServerTime() {
 	}).fail(function(result) {
 		$("#status").text("Could not get server time.");
 	});
+}
+
+function signup(){
+	console.log("on sign up function");
+	var username = $("#txtUserName").val();
+	var password = $("#txtPassword").val();
+	var password2 = $("#txtPassword2").val();
+
+	console.log(username + " " + password + " " + password2);
 }

@@ -3,6 +3,8 @@ const express = require('express');
 var app = express();
 //session
 var session = require('express-session');
+var expressValidator = require('express-validator');
+var bodyParser = require('body-parser');
 //path
 const path = require('path');
 //port
@@ -14,6 +16,7 @@ const itemController = require('./controller/itemController.js');
 const userTypeController = require('./controller/userTypeController.js');
 const userController = require('./controller/userController.js');
 const rentController = require('./controller/rentController.js');
+const bcrypt = require('bcrypt');
 
 //setters
 app.set('views', path.join(__dirname, 'views'));
@@ -21,14 +24,17 @@ app.set('view engine', 'ejs');
 //use
 app.use(express.static(path.join(__dirname,"/public")))
 //Session
-app.use(session({secret: 'ssshhhhh'}));
-
+app.use(expressValidator());
+//app.use(cookieParser);
+app.use(expressValidator());
+app.use(session({secret: 'ssshhhhh',resave: false, saveUninitialized: false}));
 //Middleware
 
 //Routes
 app.get('/', (req, res) => {    
     console.log(`on root`);
-    res.render('pages/login');
+    res.render('pages/login', {title: 'Login', success: false, errors: req.session.errors});
+    req.session.errors = null;
 });
 
 app.get('/login', (req, res) => {
@@ -36,17 +42,45 @@ app.get('/login', (req, res) => {
     res.render('pages/login');
 });
 
+app.post('/checkLogin/:username/:password', (req, res) => {
+    console.log('checkLogin in main');
+    password = req.params.password;
+    username = req.params.username;
+    console.log(username + " " + password);
+    var resp = userController.getUserByName(username);
+    hash = resp.password;
+    bcrypt.compare(password, hash, function(err, res) {
+        if(res === true) {
+            console.log("true check");
+        } else {
+            console.log("false check");  
+        } 
+    });
+    console.log('password:' + password + ' hash:' + hash);
+    if(password === hash){
+
+    }
+});
+
+
+    
+
+app.get('/signup', (req, res) => {
+    console.log(`on signup`);
+    res.render('pages/signup');
+});
+
 app.get('/index', (req, res) => {
     sess = req.session;
-    if(sess.email) {
-    res.write('<h1>Hello '+sess.email+'</h1>');
+    //if(sess.email) {
+   // res.write('<h1>Hello '+sess.email+'</h1>');
     console.log(`on root with session`);
     res.render('pages/index');
     //res.end('<a href="+">Logout</a>');
-    } else {
-        res.write('<h1>Please login first.</h1>');
-        res.end('<a href="/login">Login</a>');
-    }
+    //} else {
+    //    res.write('<h1>Please login first.</h1>');
+    //    res.end('<a href="/login">Login</a>');
+    //}
     
 });
 
@@ -65,15 +99,15 @@ app.get('/itemsType', (req, res) => {
     res.render('pages/itemType');
 });
 
-//Server sessions.
-//Setup our routes
-//app.post('/login', serverSession.handleLogin);
-//app.post('/logout', serverSession.handleLogout);
-//app.get('/verifyLogin', serverSession.verifyLogin);
+app.get('/userType', (req, res) => {
+    console.log(`on user type page`);
+    res.render('pages/userType');
+});
 
-//This method has a middleware function "verifyLogin" that will be called first
-//app.get('/getServerTime', serverSession.getServerTime);
-
+app.get('/userSetup', (req, res) => {
+    console.log(`on user Setup page`);
+    res.render('pages/userSetup');
+});
 
 //*********************************************************Authors functions*********************************************************
 app.get('/author/:value', authorController.getAuthorById);
@@ -128,9 +162,11 @@ app.get('/user/name/:value', userController.getUserByName)
 
 app.post('/user/:user_type_id/:name/:descr/:password', userController.saveUser);
 
-app.put('/user/:user_id/:descr', userController.updateUser);
+app.put('/user/:user_id/:usertype', userController.updateUser);
 
 app.delete('/user/:user_id', userController.deleteUser);
+
+app.get('/user/check_password/:pass/:hash', userController.checkPassword);
 
 //*********************************************************rent Functions*********************************************************
 app.get('/rent/:value', rentController.getRentById);

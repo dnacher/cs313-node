@@ -28,8 +28,8 @@ UserService.prototype.saveUser = function(user_type_id,name, descr,password) {
     return pool.query('INSERT INTO users (user_type_id,name,description,password) values($1,$2,$3,$4)', [user_type_id, name, descr,password]);
 };
 
-UserService.prototype.updateUser = function(user_id, descr) {
-    return pool.query('UPDATE users set description=$1 WHERE user_id=$2', [descr, user_id]);
+UserService.prototype.updateUser = function(user_id, userTypeId) {
+    return pool.query('UPDATE users set user_type_id=$1 WHERE user_id=$2', [userTypeId, user_id]);
 };
 
 UserService.prototype.deleteUser = function(user_id) {

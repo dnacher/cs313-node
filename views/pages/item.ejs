@@ -1,26 +1,28 @@
 <html>
     <head>
         <title>Book</title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
-        <script src="/js/bootstrap.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+        <% include head.ejs %>
     </head>    
     <body>        
         <% include menu.ejs%>
         <% include endmenu.ejs%>
-        <div><h2>Book</h2></div><br>         
+        <% include container.ejs%>
+        <div><h2>Item</h2></div><br>         
         <div>
-            <input type="text" id="bookId">
-            <button onclick="getBook()" class="btn btn-success">Search</button><br><br>
-            <button onclick="getBooks()" class="btn btn-primary">display all Items</button><br><br>
-            <button onclick="toggle()" class="btn btn-primary">Create</button><br><br>
+            <% include submenu.ejs%>  
+                <li class="nav-item active">    
+                    <button onclick="getItems()" class="btn btn-success">Display all Items</button><br><br>
+                </li>
+                <li class="nav-item active">
+                    <button onclick="toggle()" class="btn btn-primary">Create</button><br><br>
+                </li>        
+            <% include endsubmenu.ejs%>
+            <input type="text" id="itemId">
+            <button onclick="getItem()" class="btn btn-success">Search</button><br><br>
         </div>
         <br><br>
         <div id="createForm" style="display:none;" class="form-group">
-            <h2>Create Book</h2>
+            <h2>Create Item</h2>
             <label for="name" class="col-sm-2 col-form-label">Name</label>
             <input type="text" id="name"><br>
             <label for="description" class="col-sm-2 col-form-label">Description</label>
@@ -30,17 +32,17 @@
             <label for="authorId" class="col-sm-2 col-form-label">Author</label>            
             <select name="authors" id="authorId"></select><br>
             <label class="col-sm-2 col-form-label"></label>  
-            <button onclick="createBook()" class="col-sm-2  btn btn-success">Create</button>
+            <button onclick="createItem()" class="col-sm-2  btn btn-success">Create</button>
             <br><br>
         </div>
 
 
         <div id="divResults">
             <h2>Results</h2>
-            <ul id="ulResults">
-            </ul>
+            <div class="container" id="ulResults">
+            </div>
         </div>
-        
+        <% include endcontainer.ejs%>
         <script type="text/javascript">
 
             function getAuthors() {
@@ -89,21 +91,24 @@
                 xhr.send();
             }
 
-            function getBook() {
-                // get book
-                var bookId = $("#bookId").val();
-                console.log(bookId);
+            function getItem() {
+                // get item
+                var itemId = $("#itemId").val();
+                console.log(itemId);
                 var xhr = new XMLHttpRequest();
-                console.log("Starting search for: " + bookId);
-                xhr.open('GET', 'book/' + bookId);
+                console.log("Starting search for: " + itemId);
+                xhr.open('GET', 'item/' + itemId);
                 xhr.onload = function() {
                     console.log("got response!");
                     var resultList = $("#ulResults");
 		            resultList.empty();
                     if (xhr.status === 200) {
                         var resp = JSON.parse(xhr.responseText);
-                        var book = resp.book_id + " " + resp.name;
-			            resultList.append("<li><p>" + book + "  <button onclick='deleteBook(" + resp.book_id + ")'>X</button></p></li>");
+                        //row header
+			            resultList.append("<div class='row'><div class='col-sm'><strong> Id </div><div class='col-sm'>Name </div><div class='col-sm'>Description</div></strong></div><br>");
+
+                        //row
+                        resultList.append("<div class='row'><div class='col-sm'>" + resp.item_id + "</div><div class='col-sm'>" + resp.name + "</div><div class='col-sm'>" + resp.description + "</div></div>");
                     } else {
                         alert('Request failed.  Returned status of ' + xhr.status);
                     }
@@ -111,10 +116,10 @@
                 xhr.send();         
             }
 
-            function getBooks() {
-                // get all books
+            function getItems() {
+                // get all items
                 var xhr = new XMLHttpRequest();                
-                xhr.open('GET', 'books/');
+                xhr.open('GET', 'item/');
                 xhr.onload = function() {
                     console.log("got response!");
                     if (xhr.status === 200) {
@@ -123,9 +128,9 @@
                         var resp = JSON.parse(xhr.responseText);                        
                         var resultList = $("#ulResults");
 		                resultList.empty();
+                        resultList.append("<div class='row'><div class='col-sm'><strong> Id</div><div class='col-sm'>Name</div><div class='col-sm'>Description</div><div class='col-sm'>Action</div></strong></div><br>");
                         for ( var i = 0; i < resp.length; i++ ) {
-                            var book = resp[i].book_id + " " + resp[i].name;
-			                resultList.append("<li><p>" + book + "  <button onclick='deleteBook(" + resp[i].book_id + ")'>X</button></p></li>");
+			                resultList.append("<div class='row'><div class='col-sm'>" + resp[i].item_id + "</div><div class='col-sm'>" + resp[i].name + "</div><div class='col-sm'>" + resp[i].description + "</div> <div class='col-sm'><button onclick='deleteItem(" + resp[i].item_id + ")' class='btn btn-danger'>Delete</button></div></div><br>");
                         }
                     } else {
                         alert('Request failed.  Returned status of ' + xhr.status);
@@ -136,32 +141,32 @@
 
            
            function toggle() {
-               getAuthors();
-               getItemTypes();
+                getAuthors();
+                getItemTypes();
                 // get all author
                 $("#createForm").fadeToggle();
             }
 
-            function createBook(){
-                // create book
+            function createItem(){
+                // create item
                 var name = $("#name").val();
-                var description = $("#description").val();
+                var subtitle = $("#subtitle").val();
                 var authorId = $("#authorId").val();
                 var itemTypeId = $("#itemTypeId").val();
-                console.log("name: " + name + " description: " + description + " author id: " + authorId);
+                console.log("name: " + name + " subtitle: " + subtitle + " author id: " + authorId);
                 var xhr = new XMLHttpRequest();
-                console.log("Starting search for: " + bookId);
-                xhr.open('POST', 'item/' + itemTypeId + "/" + authorId + "/" + name + "/" + description);                          
+                console.log("Starting search for: " + itemId);
+                xhr.open('POST', 'item/' + itemTypeId + "/" + authorId + "/" + name + "/" + subtitle);                          
                 xhr.send();                 
                 toggle();    
                 allAuthor();            
             }  
             
-            function deleteAuthor(authorId){
+            function deleteItem(itemId){
                 // delete author                
-                console.log("Deleting author_id" + authorId);
+                console.log("Deleting item_id" + itemId);
                 var xhr = new XMLHttpRequest();
-                xhr.open('DELETE', 'author/' + authorId);                          
+                xhr.open('DELETE', 'item/' + itemId);                          
                 xhr.send();                
                 allAuthor();  
             }

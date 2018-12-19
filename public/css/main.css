@@ -1,3 +1,8 @@
+body {
+    background-image: url("/../images/books.jpg");
+    background-size: cover;
+}
+
 .center {
     width: 550px;
     height: 350px;
@@ -13,20 +18,15 @@
     border-radius: 15px;
 }
 
-body {
-    background-image: url("/../images/books.jpg");
-    background-size: cover;
-}
-
-.center form .buttonDiv {
+.center .buttonDiv {
     text-align: center;
 }
 
-.center form h1{
+.center h1{
     text-align: center;
 }
 
-.center form div div {
+.center div div {
     text-align: right;
 }
 
@@ -36,5 +36,41 @@ body {
 }
 
 .center div label {
+    text-align: left;
+}
+
+.center2 {
+    width: 600px;
+    height: 420px;
+    background-color: #2B579A;
+    color: white;
+    position: absolute;
+    top:50px;
+    bottom: 50px;
+    left: 50px;
+    right: 50px;    
+    margin: auto;
+    padding: 10px;
+    border-radius: 15px;
+}
+
+.center2 .buttonDiv {
+    text-align: center;
+}
+
+.center2 h1{
+    text-align: center;
+}
+
+.center2 div div {
+    text-align: right;
+}
+
+.center2 p {
+    font-size: 12px;
+    text-align: left;
+}
+
+.center2 div label {
     text-align: left;
 }

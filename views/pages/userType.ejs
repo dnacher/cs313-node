@@ -1,65 +1,64 @@
 <html>
     <head>
-        <title>Item Type</title>
+        <title>User Type</title>
         <% include head.ejs %>
     </head>    
     <body>        
         <% include menu.ejs%> 
         <% include endmenu.ejs%>
         <% include container.ejs%>
-        <div><h2>Item Type</h2></div><br>        
+        <div><h2>User Type</h2></div><br>        
         <div>
             <% include submenu.ejs%>  
             <li class="nav-item active">    
-                <button onclick="getItemTypes()" class="btn btn-success">Display all Items Type</button><br><br>
+                <button onclick="getUserTypes()" class="btn btn-success">Display all User Types</button><br><br>
             </li>
             <li class="nav-item active">    
                 <button onclick="toggle()" class="btn btn-primary">Create</button><br><br>
             </li>
             <% include endsubmenu.ejs%>
 
-            <input type="text" id="itemTypeId">
-            <button onclick="getItemType()" class="btn btn-success">Search</button><br><br>            
+            <input type="text" id="userTypeId">
+            <button onclick="getUserType()" class="btn btn-success">Search</button><br><br>            
         </div>
         <br><br>
         <div id="createForm" style="display:none;" class="form-group">
-            <h2>Create Item Type</h2>
+            <h2>Create User Type</h2>
             <label for="name" class="col-sm-2 col-form-label">Name</label>
             <input type="text" id="name"><br>
             <label for="description" class="col-sm-2 col-form-label">Description</label>
             <input type="text" id="description"><br>
             <label for="name" class="col-sm-2 col-form-label"></label>
-            <button onclick="createItemType()" class="col-sm-2  btn btn-success">Create</button>
+            <button onclick="createUserType()" class="col-sm-2  btn btn-success">Create</button>
             <br><br>
         </div>
 
 
         <div id="divResults">
             <h2>Results</h2>
-            <div class="container" id="ulResults">
-            </div>
+            <ul id="ulResults">
+            </ul>
         </div>
         <% include endcontainer.ejs%>
         <script type="text/javascript">
 
-            function getItemType() {
+            function getUserType() {
                 // get item Type
-                var itemTypeId = $("#itemTypeId").val();
-                console.log(itemTypeId);
+                var userTypeId = $("#userTypeId").val();
+                console.log(userTypeId);
                 var xhr = new XMLHttpRequest();
-                console.log("Starting search for: " + itemTypeId);
-                xhr.open('GET', 'item_type/' + itemTypeId);
+                console.log("Starting search for: " + userTypeId);
+                xhr.open('GET', 'user_type/' + userTypeId);
                 xhr.onload = function() {
                     console.log("got response!");
                     var resultList = $("#ulResults");
 		            resultList.empty();
                     if (xhr.status === 200) {
                         var resp = JSON.parse(xhr.responseText);
+                        var userType = resp.user_type_id + " " + resp.name;
                         //row header
 			            resultList.append("<div class='row'><div class='col-sm'><strong> Id </div><div class='col-sm'>Name </div></strong></div><br>");
-
-                        //row
-                        resultList.append("<div class='row'><div class='col-sm'>" + resp.item_type_id + "</div><div class='col-sm'>" + resp.name + "</div></div>");
+			            resultList.append("<div class='row'><div class='col-sm'>" + resp.user_type_id + "</div><div class='col-sm'>" + resp.name + "</div></div>");
                     } else {
                         alert('Request failed.  Returned status of ' + xhr.status);
                     }
@@ -67,10 +66,10 @@
                 xhr.send();         
             }
 
-            function getItemTypes() {
-                // get all Item Types
+            function getUserTypes() {
+                // get all user Type
                 var xhr = new XMLHttpRequest();                
-                xhr.open('GET', 'item_type/');
+                xhr.open('GET', 'user_type/');
                 xhr.onload = function() {
                     console.log("got response!");
                     if (xhr.status === 200) {
@@ -82,8 +81,8 @@
                         //row header
 			            resultList.append("<div class='row'><div class='col-sm'><strong> Id </div><div class='col-sm'>Name </div><div class='col-sm'>Action </div></strong></div><br>");
                         for ( var i = 0; i < resp.length; i++ ) {
-                            //row
-                            resultList.append("<div class='row'><div class='col-sm'>" + resp[i].item_type_id + "</div><div class='col-sm'>" + resp[i].name + "</div><div class='col-sm'>  <button onclick='deleteItemType(" + resp[i].item_type_id + ")' class='btn btn-danger'>Delete</button> </div></div>");
+                            var userType = resp[i].user_type_id + " " + resp[i].name;
+                            resultList.append("<div class='row'><div class='col-sm'>" + resp[i].user_type_id + "</div><div class='col-sm'>" + resp[i].name + "</div><div class='col-sm'><button onclick='deleteItemType(" + resp[i].user_type_id + ")' class='btn btn-danger'>Delete</button></div></div><br>");
                         }
                     } else {
                         alert('Request failed.  Returned status of ' + xhr.status);
@@ -98,24 +97,24 @@
                 $("#createForm").fadeToggle();
             }
 
-            function createItemType(){
-                // create Item Type
+            function createUserType(){
+                // create user Type
                 var name = $("#name").val();
                 var description = $("#description").val();
                 console.log(name + " " + description);
                 var xhr = new XMLHttpRequest();
-                console.log("Starting search for: " + itemTypeId);
-                xhr.open('POST', 'item_type/' + name + "/" + description);                          
+                console.log("Starting search for: " + userTypeId);
+                xhr.open('POST', 'user_type/' + name + "/" + description);                          
                 xhr.send();                 
                 toggle();    
-                getItemTypes();            
+                getUserTypes();            
             }  
             
-            function deleteItemType(itemTypeId){
-                // delete item Type                
-                console.log("Deleting item_type_id" + itemTypeId);
+            function deleteUserType(userTypeId){
+                // delete User Type                
+                console.log("Deleting user_type_id" + userTypeId);
                 var xhr = new XMLHttpRequest();
-                xhr.open('DELETE', 'item_type/' + itemTypeId);                          
+                xhr.open('DELETE', 'user_type/' + userTypeId);                          
                 xhr.send();                
                 getItemTypes();
             }

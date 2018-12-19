@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sign up</title>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  		crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/css/main.css">
+	<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="js/hullabaloo.js"></script>
+</head>
+<body>
+	<div class="center2">
+		<h1>Sign Up</h1>		
+		<div class="form-group">
+			<label for="txtUserName">User address</label>
+			<input type="text" class="form-control" id="txtUserName" aria-describedby="User" placeholder="Enter user name">
+			<p>We'll never share your data with anyone else.</p>
+		</div>
+		<div class="form-group">
+			<label for="txtPassword">Password</label>
+			<input type="password" class="form-control" id="txtPassword" placeholder="Password">
+		</div>
+		<div class="form-group">
+			<label for="txtPassword2">Re-type Password</label>
+			<input type="password" class="form-control" id="txtPassword2" placeholder="Password">
+		</div>
+		<div>
+			<div>
+				<a href="/login" class="badge badge-primary">Already have an account?</a><br>
+			</div>
+		</div>
+		<div class="buttonDiv">
+			<!-- <button onclick="signup()" class="btn btn-primary btn-lg">Sign up</button> -->
+			<button onclick="createUser()" class="btn btn-primary">Sign up</button><br><br>
+
+			<script type="text/javascript">	
+				
+				function createUser() {					
+					var hulla = new hullabaloo();
+					var username = $("#txtUserName").val();
+					var password = $("#txtPassword").val();
+					var password2 = $("#txtPassword2").val();
+					if(username){
+						if(password){
+							if(password === password2){								
+								var xhr = new XMLHttpRequest();
+								xhr.open('POST', 'user/' + 3 + "/" + username + "/" + username + "/" + password);								
+								xhr.send();
+								hulla.send('User created', 'success');
+								window.location.replace("/");
+							}else{						
+								hulla.send('Please verify Password, passwords must match', 'danger');
+							}
+						}else{
+							hulla.send('Password cannot be empty', 'danger');
+						}
+					}else{
+						hulla.send('User cannot be empty', 'danger');
+					}               	
+				}
+			</script>
+		</div>	
+	</div>
+</body>
+</html>

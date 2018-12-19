@@ -1,37 +1,72 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Test Form</title>
+	<title>Login</title>
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   		crossorigin="anonymous"></script>
-	<script src="../../controller/login.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="/css/main.css">
 	
 </head>
 <body>
-	<div class="center">
-		<form>
-			<h1>Login</h1>
-			<div class="form-group">
-				<label for="txtUserName">User address</label>
-				<input type="text" class="form-control" id="txtUserName" aria-describedby="User" placeholder="Enter user name">
-				<p>We'll never share your data with anyone else.</p>
-			</div>
-			<div class="form-group">
-				<label for="txtPassword">Password</label>
-				<input type="password" class="form-control" id="txtPassword" placeholder="Password">
-			</div>
+	<div class="center">		
+		<h1>Login</h1>
+		<div class="form-group">
+			<label for="txtUserName">User address</label>
+			<input type="text" class="form-control" id="txtUserName" aria-describedby="User" placeholder="Enter user name">
+			<p>We'll never share your data with anyone else.</p>
+		</div>
+		<div class="form-group">
+			<label for="txtPassword">Password</label>
+			<input type="password" class="form-control" id="txtPassword" placeholder="Password">
+		</div>
+		<div>
 			<div>
-				<div>
-					<a href="/signup" class="badge badge-primary">Sign up</a><br>
-				</div>
+				<a href="/signup" class="badge badge-primary">Sign up</a><br>
 			</div>
-			<div class="buttonDiv">
-				<button type="submit" class="btn btn-primary btn-lg">Submit</button>
-			</div>
-		</form>
+		</div>
+		<div class="buttonDiv">
+			<button class="btn btn-primary btn-lg" onclick="getUser()">Log in</button>
+		</div>
 	</div>
+
+	<script type="text/javascript">
+
+		function getUser() {			
+			var username = $("#txtUserName").val();
+			var password = $("#txtPassword").val();
+			var hash;
+			if(username === 'asd' && password === 'asd'){
+				window.location.replace("/index");
+			}
+			//var xhr = new XMLHttpRequest();
+			//xhr.open('POST', 'checkLogin/' + username + "/" + password);
+			//xhr.send();
+			/*console.log(username + " " + password);
+			var xhr = new XMLHttpRequest();
+			xhr.open('GET', 'user/name/' + username);								
+			xhr.onload = function() {
+				if (xhr.status === 200) {
+					var resp = JSON.parse(xhr.responseText);
+					hash = resp.password;
+					checkUser(hash);					
+				} else {
+					alert('Request failed.  Returned status of ' + xhr.status);
+				}
+			};
+			xhr.send();*/
+		}
+
+		function checkUser(hash){
+			console.log("checkUser in Login.ejs");
+			var password = $("#txtPassword").val();
+			var xhr = new XMLHttpRequest();
+			xhr.open('POST', 'checkLogin/' + password);
+			xhr.send();
+		}
+
+		
+	</script>
 </body>
 </html>
