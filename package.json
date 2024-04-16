@@ -22,7 +22,7 @@
     "jquery": "^3.3.1",
     "morgan": "^1.9.1",
     "passport": "0.6.0",
-    "pg": "^8.11.1",
+    "pg": "^8.11.0",
     "popper": "^1.0.1",
     "popper.js": "^1.14.6",
     "session-file-store": "^1.2.0"
